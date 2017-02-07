@@ -25,14 +25,16 @@
   command: mkdir /home/dojo/.vnc/
   ignore_errors: yes
 
+- sudo: yes
+  sudo_user: dojo
+  command: echo "d0j04fun" | vncpasswd -f > /home/dojo/.vnc/passwd
+
 - name: install vnc configuration
   copy: src={{item}} dest=/home/dojo/.vnc/{{item}} force=yes mode=700 owner=dojo
   with_items:
-      - passwd
       - xstartup
 
 - name: install vnc init script
-  copy: src=vncserver dest=/etc/init.d/vncserver mode=0755 owner=root
-
-- name: register vncserver as service
-  raw: sudo update-rc.d vncserver defaults
+  copy: src=vncserver@.service dest=/etc/systemd/system/vncserver@.service mode=0755 owner=root
+  notify:
+    - restart vnc

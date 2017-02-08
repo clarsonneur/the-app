@@ -45,12 +45,10 @@
     - dojo2
 
 - name: install vnc configuration
-  copy: src={{item.file}} dest=/home/{{item.user}}/.vnc/{{item.file}} force=yes mode=700 owner={{item.user}}
+  copy: src=xstartup dest=/home/{{item}}/.vnc/xstartup force=yes mode=700 owner={{item}}
   with_items:
-    - file: xstartup
-      user: dojo1
-    - file: xstartup
-      user: dojo2
+    - dojo1
+    - dojo2
 
 - name: install vnc init script
   template:

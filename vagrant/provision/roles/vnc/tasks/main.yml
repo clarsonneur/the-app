@@ -22,8 +22,7 @@
 
 - sudo: yes
   sudo_user: dojo
-  command: mkdir /home/dojo/.vnc/
-  ignore_errors: yes
+  command: mkdir -p /home/dojo/.vnc/
 
 - sudo: yes
   sudo_user: dojo
@@ -38,3 +37,5 @@
   copy: src=vncserver@.service dest=/etc/systemd/system/vncserver@.service mode=0755 owner=root
   notify:
     - restart vnc
+
+- name

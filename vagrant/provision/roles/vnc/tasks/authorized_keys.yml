@@ -5,4 +5,5 @@
     user: "{{user}}"
     state: present
     key: "{{ lookup('file', '/tmp/id_rsa.{{ansible_host}}.tmp') }}"
+  delegate_to: "{{item}}"
   with_inventory_hostnames: all

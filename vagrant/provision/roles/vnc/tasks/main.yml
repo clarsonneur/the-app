@@ -7,8 +7,6 @@
     - dojo1
     - dojo2
 
-- name: "ssh key for this jumpstation"
-
 - name: "Create jumpstation ssh key to all other servers"
   command: ssh-keygen -t rsa -b 2048 -f .ssh/id_rsa -q -N ""
   args:

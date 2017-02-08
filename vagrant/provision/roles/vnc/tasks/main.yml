@@ -13,7 +13,7 @@
     creates: .ssh/id_rsa
 
 - name: Getting private key
-  command: cat .ssh/id_rsa.pub
+  command: cat .ssh/id_rsa
   register: id_rsa
 
 - name: create local dojo users .ssh directory
@@ -85,7 +85,7 @@
 - name: set vnc password
   sudo: yes
   sudo_user: "{{item}}"
-  command: "bash -c 'echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd'"
+  shell: echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd
   args:
     creates: /home/{{item}}/.vnc/passwd
     chdir: /home/{{item}}/.vnc/

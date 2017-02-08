@@ -18,7 +18,7 @@
 
 - name: create local dojo users .ssh directory
   become: true
-  become_user: {{ item }}
+  become_user: "{{ item }}"
   file:
     path: .ssh
     mode: 0755
@@ -29,10 +29,10 @@
 
 - name: Put private key on all dojo users
   sudo: yes
-  become_user: {{ item }}
+  become_user: "{{ item }}"
   lineinfile:
-    line: {{ id_rsa.output }}
-    owner: {{item}}
+    line: "{{ id_rsa.output }}"
+    owner: "{{item}}"
     mode: 0600
     create: yes
     state: present

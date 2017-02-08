@@ -56,7 +56,7 @@
 
 - name: install vnc init script
   template:
-    src: /templates/vncserver@.service
+    src: files/templates/vncserver@.service
     dest: /etc/systemd/system/vncserver-{{item}}@.service
     mode: 0644
     owner: root

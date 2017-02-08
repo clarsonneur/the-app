@@ -29,7 +29,10 @@
 - sudo: yes
   sudo_user: "{{item}}"
   file:
-    path: "/home/{{item}}/.vnc/"
+    path: "/home/{{item}}/.vnc"
+    state: directory
+    owner: {{item}}
+    mode: 0755
   with_items:
     - dojo1
     - dojo2

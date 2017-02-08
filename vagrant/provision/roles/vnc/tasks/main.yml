@@ -17,46 +17,12 @@
 - name: Downloading pub key
   fetch: src=.ssh/id_rsa.pub dest=/tmp/id_rsa.{{ansible_host}}.tmp flat=yes
 
-- name: "Add pub key to authorized_keys"
-  sudo: yes
-  sudo_user: "{{item.user}}"
-  authorized_key:
-    user: "{{item.user}}"
-    state: present
-    key: "{{ lookup('file', '/tmp/id_rsa.{{ansible_host}}.tmp') }}"
+- include: authorized_keys.yml
   with_items:
-    - user: dojo1
-      host: monitoring-node
-    - user: dojo2
-      host: monitoring-node
-    - user: dojo1
-      host: ci-node
-    - user: dojo2
-      host: ci-node
-    - user: dojo1
-      host: ci-repo
-    - user: dojo2
-      host: ci-repo
-    - user: dojo1
-      host: mongodb-node
-    - user: dojo2
-      host: mongodb-node
-    - user: dojo1
-      host: app-server-node-1
-    - user: dojo2
-      host: app-server-node-1
-    - user: dojo1
-      host: app-server-node-2
-    - user: dojo2
-      host: app-server-node-2
-    - user: dojo1
-      host: app-server-node-3
-    - user: dojo2
-      host: app-server-node-3
-    - user: dojo1
-      host: app-server-node-4
-    - user: dojo2
-      host: app-server-node-4
+    - dojo1
+    - dojo2
+  loop_control:
+    loop_var: user
 
 - name: Deleting temporal files
   local_action: command rm -f /tmp/id_rsa.{{ansible_host}}.tmp

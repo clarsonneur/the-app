@@ -1,0 +1,8 @@
+- name: "Add pub key to authorized_keys"
+  sudo: yes
+  sudo_user: "{{user}}"
+  authorized_key:
+    user: "{{user}}"
+    state: present
+    key: "{{ lookup('file', '/tmp/id_rsa.{{ansible_host}}.tmp') }}"
+  with_inventory_hostnames: all

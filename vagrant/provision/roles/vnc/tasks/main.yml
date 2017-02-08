@@ -24,6 +24,7 @@
     user: "{{item}}"
     state: present
     key: "{{ lookup('file', '/home/{{item}}/.ssh/id_rsa.pub') }}"
+  delegate_to: delegate.host
   with_items:
     - dojo1
     - dojo2

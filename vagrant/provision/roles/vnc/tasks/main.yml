@@ -30,7 +30,6 @@
     user: "{{item}}"
     state: present
     key: "{{ lookup('file', '/tmp/id_rsa.{{item}}.tmp') }}"
-  delegate_to: delegate.host
   with_items:
     - dojo1
     - dojo2

@@ -4,7 +4,7 @@
     name: dojo
     comment: "Dojo jumpstation account"
 
-- name: install xfce
+- name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes
   with_items:
     - xfce4

@@ -22,7 +22,8 @@
 
 - sudo: yes
   sudo_user: dojo
-  command: mkdir -p /home/dojo/.vnc/
+  file:
+    path: /home/dojo/.vnc/
 
 - name: set vnc password
   sudo: yes
@@ -37,7 +38,7 @@
       - xstartup
 
 - name: install vnc init script
-  copy: src=vncserver@.service dest=/etc/systemd/system/vncserver@.service mode=0755 owner=root
+  copy: src=vncserver@.service dest=/etc/systemd/system/vncserver@.service mode=0644 owner=root
   notify:
     - restart vnc
 

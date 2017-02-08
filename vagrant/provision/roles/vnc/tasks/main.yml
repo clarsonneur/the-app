@@ -1,8 +1,11 @@
 ---
 - name: Add dojo user account
   user:
-    name: dojo
+    name: {{item}}
     comment: "Dojo jumpstation account"
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes
@@ -15,35 +18,57 @@
     - xfonts-base
     - chromium-browser
 
-- name: install vnc configuration
+- name: install vnc configuration for {{item}}
   sudo: yes
-  sudo_user: dojo
-  copy: src=.Xauthority dest=/home/dojo/.Xauthority force=yes mode=700 owner=dojo
+  sudo_user: {{item}}
+  copy: src=.Xauthority dest=/home/dojo/.Xauthority force=yes mode=700 owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
 
 - sudo: yes
-  sudo_user: dojo
+  sudo_user: {{item}}
   file:
-    path: /home/dojo/.vnc/
+    path: /home/{{item}}/.vnc/
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: set vnc password
   sudo: yes
-  sudo_user: dojo
-  command: bash -c 'echo "d0j04fun" | vncpasswd -f > /home/dojo/.vnc/passwd && chmod 600 /home/dojo/.vnc/passwd'
+  sudo_user: {{item}}
+  command: bash -c 'echo "d0j04fun" | vncpasswd -f > /home/{{item}}/.vnc/passwd && chmod 600 /home/{{item}}/.vnc/passwd'
   args:
-    creates: /home/dojo/.vnc/passwd
+    creates: /home/{{item}}/.vnc/passwd
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: install vnc configuration
-  copy: src={{item}} dest=/home/dojo/.vnc/{{item}} force=yes mode=700 owner=dojo
+  copy: src={{item.file}} dest=/home/{{item.user}}/.vnc/{{item.file}} force=yes mode=700 owner={{item.user}}
   with_items:
-      - xstartup
+    - file: xstartup
+      user: dojo1
+    - file: xstartup
+      user: dojo2
 
 - name: install vnc init script
-  copy: src=vncserver@.service dest=/etc/systemd/system/vncserver@.service mode=0644 owner=root
+  template:
+    src: templates/vncserver@.service
+    dest: /etc/systemd/system/vncserver-{{item}}@.service
+    mode: 0644
+    owner: root
   notify:
     - restart vnc
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: Start VNC
   systemd:
     state: started
     enabled: yes
-    name: vncserver@1
+    name: vncserver-{{item}}@1
+  with_items:
+    - dojo1
+    - dojo2

@@ -13,7 +13,8 @@
     creates: .ssh/id_rsa
 
 - name: Downloading pub key
-  fetch: src=.ssh/id_rsa.pub dest=/tmp/id_rsa.{{ansible_host}}.tmp flat=yes
+  command: cat .ssh/id_rsa.pub
+  register: id_rsa_pub
 
 - include: authorized_keys.yml
   with_items:
@@ -21,9 +22,6 @@
     - dojo2
   loop_control:
     loop_var: user
-
-- name: Deleting temporal files
-  local_action: command rm -f /tmp/id_rsa.{{ansible_host}}.tmp
 
 - name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes

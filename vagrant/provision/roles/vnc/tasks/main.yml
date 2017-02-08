@@ -28,7 +28,7 @@
 - name: set vnc password
   sudo: yes
   sudo_user: dojo
-  command: echo "d0j04fun" | vncpasswd -f > /home/dojo/.vnc/passwd
+  command: bash -c 'echo "d0j04fun" | vncpasswd -f > /home/dojo/.vnc/passwd'
   args:
     creates: /home/dojo/.vnc/passwd
 

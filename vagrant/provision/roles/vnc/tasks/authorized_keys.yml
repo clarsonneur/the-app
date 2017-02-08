@@ -5,4 +5,4 @@
     user: "{{user}}"
     state: present
     key: "{{ id_rsa_pub.stdout }}"
-  hosts: "{{ groups['all'] }}"
+  delegate_to: "{{ groups['all'] }}"

@@ -12,7 +12,35 @@
   args:
     creates: .ssh/id_rsa
 
-- name: Downloading pub key
+- name: Getting private key
+  command: cat .ssh/id_rsa.pub
+  register: id_rsa
+
+- name: create local dojo users .ssh directory
+  become: true
+  become_user: {{ item }}
+  file:
+    path: .ssh
+    mode: 0755
+    state: directory
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Put private key on all dojo users
+  sudo: yes
+  become_user: {{ item }}
+  lineinfile:
+    line: {{ id_rsa.output }}
+    owner: {{item}}
+    mode: 0600
+    create: yes
+    state: present
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Getting public key
   command: cat .ssh/id_rsa.pub
   register: id_rsa_pub
 

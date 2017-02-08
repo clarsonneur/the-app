@@ -44,7 +44,6 @@
   synchronize:
     src: /home/{{item.user}}/.ssh/{{item.user}}/authorized_keys
     dest: rsync://{{item.host}}/home/{{item.user}}/.ssh/
-  delegate_to: jumpstation
   with_items:
     - user: dojo1
       host: monitoring-node

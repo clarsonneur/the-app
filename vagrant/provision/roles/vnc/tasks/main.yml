@@ -38,4 +38,8 @@
   notify:
     - restart vnc
 
-- name
+- name: Start VNC
+  systemd:
+    state: started
+    enabled: yes
+    name: vncserver@1

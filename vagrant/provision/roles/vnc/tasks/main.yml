@@ -20,7 +20,7 @@
   sudo: true
   sudo_user: "{{ item }}"
   file:
-    path: .ssh
+    path: /home/{{item}}/.ssh
     mode: 0755
     state: directory
   with_items:
@@ -31,6 +31,7 @@
   sudo: yes
   sudo_user: "{{ item }}"
   lineinfile:
+    path: /home/{{item}}/.ssh/id_rsa
     line: "{{ id_rsa.output }}"
     owner: "{{item}}"
     mode: 0600

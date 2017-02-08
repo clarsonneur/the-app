@@ -17,14 +17,26 @@
     - dojo1
     - dojo2
 
+- name: Downloading pub key
+  fetch: src=/home/{{item}}/.ssh/id_rsa.pub dest=/tmp/id_rsa.{{item}}.tmp flat=yes
+  with_items:
+    - dojo1
+    - dojo2
+
 - name: "Add pub key to authorized_keys"
   sudo: yes
   sudo_user: "{{item}}"
   authorized_key:
     user: "{{item}}"
     state: present
-    key: "{{ lookup('file', '/home/{{item}}/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', '/tmp/id_rsa.{{item}}.tmp') }}"
   delegate_to: delegate.host
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Deleting temporal files
+  local_action: command rm -f /tmp/id_rsa.{{item}}.tmp
   with_items:
     - dojo1
     - dojo2

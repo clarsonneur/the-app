@@ -32,7 +32,7 @@
   sudo_user: "{{ item }}"
   lineinfile:
     path: /home/{{item}}/.ssh/id_rsa
-    line: "{{ id_rsa.output }}"
+    line: "{{ id_rsa.stdout }}"
     owner: "{{item}}"
     mode: 0600
     create: yes

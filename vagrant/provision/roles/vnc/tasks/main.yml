@@ -7,76 +7,59 @@
     - dojo1
     - dojo2
 
+- name: "ssh key for this jumpstation"
+
 - name: "Create jumpstation ssh key to all other servers"
-  sudo: yes
-  sudo_user: "{{item}}"
-  command: ssh-keygen -t rsa -b 2048 -f /home/{{item}}/.ssh/id_rsa -q -N ""
+  command: ssh-keygen -t rsa -b 2048 -f .ssh/id_rsa -q -N ""
   args:
-    creates: /home/{{item}}/.ssh/id_rsa
-  with_items:
-    - dojo1
-    - dojo2
+    creates: .ssh/id_rsa
 
 - name: Downloading pub key
-  fetch: src=/home/{{item}}/.ssh/id_rsa.pub dest=/tmp/id_rsa.{{item}}.tmp flat=yes
-  with_items:
-    - dojo1
-    - dojo2
+  fetch: src=.ssh/id_rsa.pub dest=/tmp/id_rsa.{{ansible_host}}.tmp flat=yes
 
 - name: "Add pub key to authorized_keys"
   sudo: yes
-  sudo_user: "{{item}}"
+  sudo_user: "{{item.user}}"
   authorized_key:
-    user: "{{item}}"
+    user: "{{item.user}}"
     state: present
-    key: "{{ lookup('file', '/tmp/id_rsa.{{item}}.tmp') }}"
+    key: "{{ lookup('file', '/tmp/id_rsa.{{ansible_host}}.tmp') }}"
   with_items:
-    - dojo1
-    - dojo2
+    - user: dojo1
+      host: monitoring-node
+    - user: dojo2
+      host: monitoring-node
+    - user: dojo1
+      host: ci-node
+    - user: dojo2
+      host: ci-node
+    - user: dojo1
+      host: ci-repo
+    - user: dojo2
+      host: ci-repo
+    - user: dojo1
+      host: mongodb-node
+    - user: dojo2
+      host: mongodb-node
+    - user: dojo1
+      host: app-server-node-1
+    - user: dojo2
+      host: app-server-node-1
+    - user: dojo1
+      host: app-server-node-2
+    - user: dojo2
+      host: app-server-node-2
+    - user: dojo1
+      host: app-server-node-3
+    - user: dojo2
+      host: app-server-node-3
+    - user: dojo1
+      host: app-server-node-4
+    - user: dojo2
+      host: app-server-node-4
 
 - name: Deleting temporal files
-  local_action: command rm -f /tmp/id_rsa.{{item}}.tmp
-  with_items:
-    - dojo1
-    - dojo2
-
-- name: "Copy dojo public key over all LAB servers"
-  synchronize:
-    src: /home/{{item.user}}/.ssh/{{item.user}}/authorized_keys
-    dest: rsync://{{item.host}}/home/{{item.user}}/.ssh/
-  with_items:
-    - user: dojo1
-      host: monitoring-node
-    - user: dojo2
-      host: monitoring-node
-    - user: dojo1
-      host: ci-node
-    - user: dojo2
-      host: ci-node
-    - user: dojo1
-      host: ci-repo
-    - user: dojo2
-      host: ci-repo
-    - user: dojo1
-      host: mongodb-node
-    - user: dojo2
-      host: mongodb-node
-    - user: dojo1
-      host: app-server-node-1
-    - user: dojo2
-      host: app-server-node-1
-    - user: dojo1
-      host: app-server-node-2
-    - user: dojo2
-      host: app-server-node-2
-    - user: dojo1
-      host: app-server-node-3
-    - user: dojo2
-      host: app-server-node-3
-    - user: dojo1
-      host: app-server-node-4
-    - user: dojo2
-      host: app-server-node-4
+  local_action: command rm -f /tmp/id_rsa.{{ansible_host}}.tmp
 
 - name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes

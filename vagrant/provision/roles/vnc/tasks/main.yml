@@ -20,7 +20,7 @@
 
 - name: install vnc configuration for {{item}}
   sudo: yes
-  sudo_user: {{item}}
+  sudo_user: "{{item}}"
   copy: src=.Xauthority dest=/home/dojo/.Xauthority force=yes mode=700 owner={{item}}
   with_items:
     - dojo1

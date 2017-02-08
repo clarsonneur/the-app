@@ -24,9 +24,11 @@
   sudo_user: dojo
   command: mkdir -p /home/dojo/.vnc/
 
-- sudo: yes
+- name: set vnc password
+  sudo: yes
   sudo_user: dojo
   command: echo "d0j04fun" | vncpasswd -f > /home/dojo/.vnc/passwd
+    creates: /home/dojo/.vnc/passwd
 
 - name: install vnc configuration
   copy: src={{item}} dest=/home/dojo/.vnc/{{item}} force=yes mode=700 owner=dojo

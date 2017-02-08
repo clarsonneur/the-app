@@ -1,7 +1,7 @@
 ---
 - name: Add dojo user account
   user:
-    name: {{item}}
+    name: "{{item}}"
     comment: "Dojo jumpstation account"
   with_items:
     - dojo1
@@ -27,17 +27,17 @@
     - dojo2
 
 - sudo: yes
-  sudo_user: {{item}}
+  sudo_user: "{{item}}"
   file:
-    path: /home/{{item}}/.vnc/
+    path: "/home/{{item}}/.vnc/"
   with_items:
     - dojo1
     - dojo2
 
 - name: set vnc password
   sudo: yes
-  sudo_user: {{item}}
-  command: bash -c 'echo "d0j04fun" | vncpasswd -f > /home/{{item}}/.vnc/passwd && chmod 600 /home/{{item}}/.vnc/passwd'
+  sudo_user: "{{item}}"
+  command: "bash -c 'echo d0j04fun | vncpasswd -f > /home/{{item}}/.vnc/passwd && chmod 600 /home/{{item}}/.vnc/passwd'"
   args:
     creates: /home/{{item}}/.vnc/passwd
   with_items:

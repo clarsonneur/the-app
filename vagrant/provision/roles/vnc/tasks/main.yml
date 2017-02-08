@@ -28,7 +28,7 @@
     - dojo2
 
 - name: Put private key on all dojo users
-  sudo: yes
+  become: yes
   become_user: "{{ item }}"
   lineinfile:
     line: "{{ id_rsa.output }}"
@@ -63,15 +63,15 @@
     - chromium-browser
 
 - name: install vnc configuration
-  sudo: yes
-  sudo_user: "{{item}}"
+  become: yes
+  become_user: "{{item}}"
   copy: src=.Xauthority dest=/home/{{item}}/.Xauthority force=yes mode=700 owner={{item}}
   with_items:
     - dojo1
     - dojo2
 
-- sudo: yes
-  sudo_user: "{{item}}"
+- become: yes
+  become_user: "{{item}}"
   file:
     path: "/home/{{item}}/.vnc"
     state: directory
@@ -82,8 +82,8 @@
     - dojo2
 
 - name: set vnc password
-  sudo: yes
-  sudo_user: "{{item}}"
+  become: yes
+  become_user: "{{item}}"
   command: "bash -c 'echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd'"
   args:
     creates: /home/{{item}}/.vnc/passwd

@@ -24,6 +24,9 @@
     user: "{{item}}"
     state: present
     key: "{{ lookup('file', '/home/{{item}}/.ssh/id_rsa.pub') }}"
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: "Copy dojo public key over all LAB servers"
   synchronize:

@@ -31,7 +31,7 @@
   file:
     path: "/home/{{item}}/.vnc"
     state: directory
-    owner: {{item}}
+    owner: "{{item}}"
     mode: 0755
   with_items:
     - dojo1

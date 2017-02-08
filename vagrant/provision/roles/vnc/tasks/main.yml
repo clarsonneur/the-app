@@ -43,7 +43,7 @@
   command: "bash -c 'echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd'"
   args:
     creates: /home/{{item}}/.vnc/passwd
-    cd: /home/{{item}}/.vnc/
+    chdir: /home/{{item}}/.vnc/
   with_items:
     - dojo1
     - dojo2

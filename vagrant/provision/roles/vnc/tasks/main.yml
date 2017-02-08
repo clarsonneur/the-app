@@ -68,7 +68,9 @@
   systemd:
     state: started
     enabled: yes
-    name: vncserver-{{item}}@1
+    name: vncserver-{{item.user}}@{{item.display}}
   with_items:
-    - dojo1
-    - dojo2
+    - user: dojo1
+      display: 1
+    - user: dojo2
+      display: 2

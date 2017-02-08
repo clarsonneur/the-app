@@ -1,8 +1,6 @@
 - name: "Add pub key to authorized_keys"
-  sudo: yes
-  sudo_user: "{{user}}"
   authorized_key:
-    user: "{{user}}"
+    user: "hos"
     state: present
     key: "{{ id_rsa_pub.stdout }}"
   delegate_to: "{{ item }}"

@@ -5,4 +5,5 @@
     user: "{{user}}"
     state: present
     key: "{{ id_rsa_pub.stdout }}"
-  delegate_to: "{{ groups['all'] }}"
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames: all
